@@ -1,14 +1,28 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { featured } from '../constants';
 import * as Icon from 'react-native-feather';
 import { useNavigation } from '@react-navigation/native';
 import MapView, { Marker } from 'react-native-maps';
 import { themeColors } from '../themes';
+import call from 'react-native-phone-call';
 
 const DeliveryScreen = () => {
   const restaurant = featured.restaurants[0];
   const navigation = useNavigation();
+
+  const triggerRiderCall = useCallback(() => {
+    const args = {
+      number: '09039561875',
+      prompt: true,
+    };
+    try {
+      call(args);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
   return (
     <View className="flex-1">
       <MapView
@@ -50,11 +64,11 @@ const DeliveryScreen = () => {
             <Text className="font-semibold text-white">Your Rider</Text>
           </View>
           <View className="flex-row items-center mr-3 space-x-3">
-            <TouchableOpacity className="p-2 bg-white rounded-full">
+            <TouchableOpacity onPress={triggerRiderCall} className="p-2 bg-white rounded-full">
               <Icon.Phone fill="green" strokeWidth={1} stroke="green" />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('Home')} className="p-2 bg-white rounded-full">
-              <Icon.X  strokeWidth={3} stroke="red" />
+              <Icon.X strokeWidth={3} stroke="red" />
             </TouchableOpacity>
           </View>
         </View>
