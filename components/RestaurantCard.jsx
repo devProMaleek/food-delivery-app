@@ -1,12 +1,21 @@
 import { View, Text, TouchableWithoutFeedback, Image } from 'react-native';
-import React from 'react';
+import React, { useCallback } from 'react';
 import * as Icon from 'react-native-feather';
 import { themeColors } from '../themes';
+import { useNavigation } from '@react-navigation/native';
 
 const RestaurantCard = ({ restaurant }) => {
+  const navigation = useNavigation();
+  const handleNavigatePress = useCallback(
+    (restaurantData) => {
+      navigation.navigate('Restaurant', { ...restaurantData });
+    },
+    [restaurant]
+  );
+
   return (
     <>
-      <TouchableWithoutFeedback>
+      <TouchableWithoutFeedback onPress={() => handleNavigatePress(restaurant)}>
         <View
           style={{ shadowColor: themeColors.bgColor(0.3), shadowRadius: 7 }}
           className="mr-6 bg-white rounded-3xl shadow-lg"
