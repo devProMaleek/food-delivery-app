@@ -69,6 +69,27 @@ export const featured = {
           price: 10,
           image: require('../assets/images/pizzaDish.png'),
         },
+        {
+          id: 4,
+          name: 'sharwama',
+          description: 'cheezy garlic sharwama',
+          price: 20,
+          image: require('../assets/images/pizzaDish.png'),
+        },
+        {
+          id: 5,
+          name: 'pizza',
+          description: 'cheezy garlic pizza',
+          price: 15,
+          image: require('../assets/images/pizzaDish.png'),
+        },
+        {
+          id: 6,
+          name: 'meatpie',
+          description: 'cheezy garlic meatpie',
+          price: 7,
+          image: require('../assets/images/pizzaDish.png'),
+        },
       ],
     },
     {
