@@ -1,20 +1,30 @@
 import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import * as Icon from 'react-native-feather';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { themeColors } from '../themes';
 import DishRow from '../components/DishRow';
 import CartIcon from '../components/CartIcon';
 import { StatusBar } from 'expo-status-bar';
+import { useDispatch } from 'react-redux';
+import { setRestaurant } from '../store/slices/RestaurantSlice';
 
 const RestaurantScreen = () => {
   const { params } = useRoute();
   const navigation = useNavigation();
   let restaurant = params;
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (restaurant && restaurant.id) {
+      dispatch(setRestaurant(restaurant));
+    }
+  }, []);
+
   return (
     <View>
       <CartIcon />
-      <StatusBar style='light' />
+      <StatusBar style="light" />
       <ScrollView>
         <View className="relative">
           <Image source={restaurant.image} className="w-full h-72" />
@@ -47,7 +57,7 @@ const RestaurantScreen = () => {
           </View>
         </View>
 
-        <View className="pb-3 bg-white">
+        <View className="pb-24 bg-white">
           <Text className="px-4 py-4 text-2xl font-bold">Menu</Text>
           {restaurant.dishes?.map((dish, index) => {
             return <DishRow dish={{ ...dish }} key={index} />;
