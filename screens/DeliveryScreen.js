@@ -6,9 +6,10 @@ import { useNavigation } from '@react-navigation/native';
 import MapView, { Marker } from 'react-native-maps';
 import { themeColors } from '../themes';
 import call from 'react-native-phone-call';
+import { useSelector } from 'react-redux';
 
 const DeliveryScreen = () => {
-  const restaurant = featured.restaurants[0];
+  const { restaurant } = useSelector((state) => state.restaurant);
   const navigation = useNavigation();
 
   const triggerRiderCall = useCallback(() => {
