@@ -1,22 +1,43 @@
 import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { themeColors } from '../themes';
 import * as Icon from 'react-native-feather';
 import { capitalizeWord, formatCurrency } from '../utils';
+import { useDispatch, useSelector } from 'react-redux';
+import { addItemToCart, removeItemFromCart, selectCartItemById } from '../store/slices/CartSlice';
 
 const DishRow = ({ dish }) => {
-  const [cartValue, setCartValue] = useState(0);
+  const { items, totalQuantity } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+  const cartItem = useSelector((state) => selectCartItemById(state, dish.id));
 
-  const onAdd = useCallback(() => {
-    setCartValue((value) => value + 1);
-  }, [cartValue]);
+  const itemQuantity = useMemo(() => {
+    if (cartItem.length === 0) {
+      return 0;
+    } else {
+      return cartItem[0].quantity;
+    }
+  }, [cartItem]);
 
-  const onRemove = useCallback(() => {
-    if (cartValue === 0) {
+  const newItem = {
+    name: dish.name,
+    price: dish.price,
+    description: dish.description,
+    id: dish.id,
+    quantity: 1,
+    image: dish.image,
+    totalPrice: dish.price,
+  };
+  const handleIncrease = useCallback(() => {
+    dispatch(addItemToCart(newItem));
+  }, [newItem]);
+
+  const handleDecrease = useCallback(() => {
+    if (cartItem.length === 0) {
       return;
     }
-    setCartValue((value) => value - 1);
-  }, [cartValue]);
+    dispatch(removeItemFromCart(dish.id));
+  }, [dish, cartItem]);
 
   return (
     <View className="flex-row items-center p-3 mx-2 mb-3 bg-white shadow-2xl rounded-3xl">
@@ -32,15 +53,15 @@ const DishRow = ({ dish }) => {
             <TouchableOpacity
               className="p-1 rounded-full"
               style={{ backgroundColor: themeColors.bgColor(1) }}
-              onPress={onRemove}
+              onPress={handleDecrease}
             >
               <Icon.Minus strokeWidth={2} height={20} width={20} stroke="white" />
             </TouchableOpacity>
-            <Text className="px-3">{cartValue}</Text>
+            <Text className="px-3">{itemQuantity}</Text>
             <TouchableOpacity
               className="p-1 rounded-full"
               style={{ backgroundColor: themeColors.bgColor(1) }}
-              onPress={onAdd}
+              onPress={handleIncrease}
             >
               <Icon.Plus strokeWidth={2} height={20} width={20} stroke="white" />
             </TouchableOpacity>
