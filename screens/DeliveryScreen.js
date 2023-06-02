@@ -6,11 +6,13 @@ import { useNavigation } from '@react-navigation/native';
 import MapView, { Marker } from 'react-native-maps';
 import { themeColors } from '../themes';
 import call from 'react-native-phone-call';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearCart } from '../store/slices/CartSlice';
 
 const DeliveryScreen = () => {
   const { restaurant } = useSelector((state) => state.restaurant);
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const triggerRiderCall = useCallback(() => {
     const args = {
@@ -23,6 +25,11 @@ const DeliveryScreen = () => {
       console.log(error);
     }
   }, []);
+
+  const handleCancelNavigation = () => {
+    dispatch(clearCart());
+    navigation.navigate('Home');
+  };
 
   return (
     <View className="flex-1">
@@ -68,7 +75,7 @@ const DeliveryScreen = () => {
             <TouchableOpacity onPress={triggerRiderCall} className="p-2 bg-white rounded-full">
               <Icon.Phone fill="green" strokeWidth={1} stroke="green" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Home')} className="p-2 bg-white rounded-full">
+            <TouchableOpacity onPress={handleCancelNavigation} className="p-2 bg-white rounded-full">
               <Icon.X strokeWidth={3} stroke="red" />
             </TouchableOpacity>
           </View>
